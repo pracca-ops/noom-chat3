@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moyens techniques — GéoConsulting</title>
+<meta name="description" content="Matériel topographique, géophysique et géotechnique, moyens de déplacement et logiciels métier mobilisés par GéoConsulting sur ses missions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================================
+   GéoConsulting — feuille de style du prototype
+   Palette et typographie alignées sur la brochure 2026 (bleu / vert).
+   ========================================================================== */
+
+:root {
+  --bleu-900: #0b2a63;
+  --bleu-700: #14418f;
+  --bleu-500: #1e5bc6;
+  --vert: #3e9b35;
+  --vert-800: #2b6f24;
+  --encre: #0f1a2b;
+  --gris: #5b6880;
+  --gris-clair: #8b97aa;
+  --papier: #f4f7fa;
+  --ligne: #dce3ec;
+  --blanc: #ffffff;
+
+  --max: 1180px;
+  --pad: clamp(1.1rem, 4vw, 2.5rem);
+  --radius: 4px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--encre);
+  background: var(--blanc);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Archivo", "IBM Plex Sans", sans-serif;
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.018em;
+  color: var(--bleu-900);
+  margin: 0 0 0.6em;
+}
+
+h1 { font-size: clamp(2.1rem, 5.2vw, 3.35rem); }
+h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); }
+h3 { font-size: 1.16rem; letter-spacing: -0.01em; }
+
+p { margin: 0 0 1.1em; max-width: 68ch; }
+
+a { color: var(--bleu-500); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--bleu-900); }
+
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 3px solid var(--vert);
+  outline-offset: 2px;
+}
+
+.conteneur {
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.section { padding-block: clamp(3.2rem, 7vw, 5.5rem); }
+.section--papier { background: var(--papier); }
+.section--bleu { background: var(--bleu-900); color: #dce6f5; }
+.section--bleu h2, .section--bleu h3 { color: var(--blanc); }
+
+.intro-section { max-width: 62ch; margin-bottom: 2.6rem; }
+.intro-section p { color: var(--gris); font-size: 1.05rem; }
+.section--bleu .intro-section p { color: #b9cbe8; }
+
+/* --- règle graduée : motif signature (mire topographique) ------------------ */
+.graduation {
+  height: 14px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--bleu-900) 0 1px,
+    transparent 1px 12px
+  );
+  opacity: 0.35;
+}
+.graduation--vert {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--vert) 0 1px,
+    transparent 1px 12px
+  );
+  opacity: 0.5;
+}
+
+/* --- en-tête -------------------------------------------------------------- */
+.barre-service {
+  background: var(--bleu-900);
+  color: #c5d6f0;
+  font-size: 0.82rem;
+}
+.barre-service .conteneur {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  justify-content: flex-end;
+  padding-block: 0.45rem;
+}
+.barre-service a { color: #c5d6f0; text-decoration: none; }
+.barre-service a:hover { color: var(--blanc); text-decoration: underline; }
+
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--ligne);
+}
+.entete .conteneur {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-block: 0.7rem;
+}
+.marque { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.marque img { width: 158px; }
+.marque span {
+  display: none;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  color: var(--gris);
+  border-left: 1px solid var(--ligne);
+  padding-left: 0.8rem;
+  max-width: 15ch;
+}
+@media (min-width: 1250px) { .marque span { display: block; } }
+
+.nav { display: flex; align-items: center; gap: 0.15rem; }
+.nav a {
+  display: block;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.93rem;
+  font-weight: 500;
+  color: var(--encre);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.nav a:hover { color: var(--bleu-700); border-bottom-color: var(--ligne); }
+.nav a[aria-current="page"] { color: var(--bleu-900); border-bottom-color: var(--vert); }
+
+.burger {
+  display: none;
+  background: none;
+  border: 1px solid var(--ligne);
+  border-radius: var(--radius);
+  padding: 0.45rem 0.7rem;
+  font-size: 1.15rem;
+  cursor: pointer;
+  color: var(--bleu-900);
+}
+
+@media (max-width: 940px) {
+  .burger { display: block; }
+  .nav {
+    display: none;
+    position: absolute;
+    inset: 100% 0 auto 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: var(--blanc);
+    border-bottom: 1px solid var(--ligne);
+    padding: 0.5rem var(--pad) 1rem;
+    box-shadow: 0 18px 30px -22px rgba(11, 42, 99, 0.5);
+  }
+  .nav.ouvert { display: flex; }
+  .nav a { padding: 0.7rem 0; border-bottom: 1px solid var(--ligne); }
+}
+
+/* --- boutons -------------------------------------------------------------- */
+.bouton {
+  display: inline-block;
+  padding: 0.72rem 1.35rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+.bouton--plein { background: var(--vert); color: var(--blanc); }
+.bouton--plein:hover { background: var(--vert-800); color: var(--blanc); }
+.bouton--ligne { border-color: var(--bleu-900); color: var(--bleu-900); background: transparent; }
+.bouton--ligne:hover { background: var(--bleu-900); color: var(--blanc); }
+.bouton--clair { background: transparent; border-color: rgba(255,255,255,.5); color: var(--blanc); }
+.bouton--clair:hover { background: var(--blanc); color: var(--bleu-900); }
+
+/* --- héros ---------------------------------------------------------------- */
+.heros {
+  background:
+    linear-gradient(180deg, #fbfcfe 0%, var(--papier) 100%);
+  border-bottom: 1px solid var(--ligne);
+}
+.heros .conteneur {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  padding-block: clamp(2.6rem, 6vw, 4.4rem);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .heros .conteneur { grid-template-columns: 1.15fr 0.85fr; }
+}
+.heros p.accroche {
+  font-size: 1.1rem;
+  color: var(--gris);
+  max-width: 52ch;
+}
+.heros-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.6rem; }
+
+.chiffres {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  margin-top: 2.6rem;
+  background: var(--ligne);
+  border: 1px solid var(--ligne);
+}
+.chiffres div { background: var(--blanc); padding: 0.95rem 1rem; }
+.chiffres b {
+  display: block;
+  font-family: "Archivo", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--bleu-900);
+  line-height: 1.1;
+}
+.chiffres span { font-size: 0.82rem; color: var(--gris); }
+
+.heros-visuel { position: relative; }
+.heros-visuel img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--ligne);
+}
+.heros-visuel figcaption {
+  font-size: 0.8rem;
+  color: var(--gris);
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--vert);
+  margin-top: 0.6rem;
+}
+
+/* --- grilles génériques --------------------------------------------------- */
+.grille { display: grid; gap: 1.5rem; }
+.grille--2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.grille--3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.grille--4 { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+
+.carte {
+  background: var(--blanc);
+  border: 1px solid var(--ligne);
+  padding: 1.5rem;
+}
+.carte h3 { margin-bottom: 0.45rem; }
+.carte p { font-size: 0.95rem; color: var(--gris); margin-bottom: 0; }
+.carte--pole { border-top: 3px solid var(--vert); }
+
+.liste-nue { list-style: none; margin: 0; padding: 0; }
+.liste-puce { padding-left: 1.1rem; margin: 0 0 1.1em; }
+.liste-puce li { margin-bottom: 0.35rem; }
+
+/* --- tableau des essais --------------------------------------------------- */
+.tableau { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+.tableau th,
+.tableau td { text-align: left; padding: 0.75rem 0.9rem; border-bottom: 1px solid var(--ligne); vertical-align: top; }
+.tableau th {
+  font-family: "Archivo", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--bleu-900);
+  background: var(--papier);
+  border-bottom: 2px solid var(--bleu-900);
+}
+.tableau tbody tr:hover { background: #fafcff; }
+.norme { color: var(--gris); font-size: 0.86rem; }
+.defilant { overflow-x: auto; }
+
+/* --- références ----------------------------------------------------------- */
+.filtres { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 2rem; }
+.filtre {
+  border: 1px solid var(--ligne);
+  background: var(--blanc);
+  color: var(--gris);
+  padding: 0.45rem 0.95rem;
+  font: inherit;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filtre:hover { border-color: var(--bleu-500); color: var(--bleu-700); }
+.filtre[aria-pressed="true"] { background: var(--bleu-900); border-color: var(--bleu-900); color: var(--blanc); }
+
+.ref {
+  border: 1px solid var(--ligne);
+  border-left: 3px solid var(--vert);
+  background: var(--blanc);
+  padding: 1.35rem 1.5rem;
+  display: grid;
+  gap: 0.55rem;
+}
+.ref h3 { margin: 0; font-size: 1.05rem; line-height: 1.35; }
+.ref dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
+}
+.ref dt { color: var(--gris-clair); }
+.ref dd { margin: 0; color: var(--encre); }
+.ref .prestations { font-size: 0.88rem; color: var(--gris); margin: 0; }
+.etiquette {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.15rem 0.55rem;
+  border-radius: 2px;
+  background: #eaf2ff;
+  color: var(--bleu-700);
+}
+.etiquette--vert { background: #e9f6e6; color: var(--vert-800); }
+
+/* --- galerie -------------------------------------------------------------- */
+.galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0.6rem; }
+.galerie img { aspect-ratio: 1 / 1; object-fit: cover; border: 1px solid var(--ligne); }
+
+/* --- bandeau bailleurs ---------------------------------------------------- */
+.bailleurs { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.bailleurs li {
+  border: 1px solid rgba(255,255,255,.22);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  color: #e2ebfa;
+}
+
+/* --- certifications ------------------------------------------------------- */
+.iso { display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.iso article { border: 1px solid var(--ligne); background: var(--blanc); padding: 1.4rem; }
+.iso b { display: block; font-family: "Archivo", sans-serif; font-size: 1.45rem; color: var(--bleu-900); }
+.iso span { font-size: 0.85rem; color: var(--vert-800); font-weight: 600; }
+.iso p { font-size: 0.92rem; color: var(--gris); margin: 0.6rem 0 0; }
+
+/* --- formulaire ----------------------------------------------------------- */
+.champ { display: grid; gap: 0.35rem; margin-bottom: 1rem; }
+.champ label { font-size: 0.88rem; font-weight: 600; color: var(--bleu-900); }
+.champ input,
+.champ select,
+.champ textarea {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--ligne);
+  border-radius: var(--radius);
+  background: var(--blanc);
+  color: var(--encre);
+  width: 100%;
+}
+.champ textarea { min-height: 140px; resize: vertical; }
+.champ input:focus, .champ textarea:focus, .champ select:focus { border-color: var(--bleu-500); }
+
+.avis {
+  border: 1px solid #f0d48a;
+  background: #fff8e6;
+  padding: 0.85rem 1.1rem;
+  font-size: 0.9rem;
+  color: #6a5008;
+  border-radius: var(--radius);
+}
+.avis--rouge { border-color: #f0b4b4; background: #fff1f1; color: #8c2020; }
+
+/* --- pied de page --------------------------------------------------------- */
+.pied { background: var(--bleu-900); color: #b9cbe8; padding-block: 3rem 1.5rem; font-size: 0.92rem; }
+.pied h4 { color: var(--blanc); font-size: 0.95rem; margin-bottom: 0.7rem; }
+.pied a { color: #b9cbe8; text-decoration: none; }
+.pied a:hover { color: var(--blanc); text-decoration: underline; }
+.pied .grille { gap: 2rem; }
+.pied li { margin-bottom: 0.35rem; }
+.pied-bas {
+  margin-top: 2.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(255,255,255,.16);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  color: #8ea8cf;
+}
+
+/* --- page d'administration ------------------------------------------------ */
+.admin-corps { background: var(--papier); min-height: 100vh; }
+.admin-connexion {
+  max-width: 400px;
+  margin: 8vh auto;
+  background: var(--blanc);
+  border: 1px solid var(--ligne);
+  padding: 2rem;
+}
+.admin-entete {
+  background: var(--bleu-900);
+  color: var(--blanc);
+  padding: 0.9rem 0;
+}
+.admin-entete .conteneur { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.admin-entete strong { font-family: "Archivo", sans-serif; }
+.admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.admin-stats div { background: var(--blanc); border: 1px solid var(--ligne); padding: 1rem 1.2rem; }
+.admin-stats b { display: block; font-family: "Archivo", sans-serif; font-size: 1.8rem; color: var(--bleu-900); }
+.admin-stats span { font-size: 0.85rem; color: var(--gris); }
+.panneau { background: var(--blanc); border: 1px solid var(--ligne); padding: 1.5rem; margin-bottom: 2rem; }
+.cache { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}
+
+</style>
+</head>
+<body data-page="moyens" data-base="">
+
+<div id="entete"></div>
+
+<section class="section">
+  <div class="conteneur">
+    <h1>Moyens techniques</h1>
+    <p>Un bureau d'études ne vaut que par sa capacité à mesurer. Nos équipes disposent en propre du matériel de levé, de prospection et d'essai nécessaire à nos missions, sans recours à la location.</p>
+  </div>
+</section>
+
+<div class="graduation"></div>
+
+<section class="section section--papier">
+  <div class="conteneur">
+    <div class="grille grille--2">
+      <article class="carte">
+        <h3>Topographie et levés</h3>
+        <ul class="liste-puce">
+          <li>Station totale Leica avec accessoires</li>
+          <li>GPS différentiel FOIF</li>
+          <li>Niveau de chantier Bosch</li>
+          <li>GPS portatifs Garmin</li>
+          <li>Drone pour levés photogrammétriques</li>
+        </ul>
+      </article>
+      <article class="carte">
+        <h3>Géophysique et reconnaissance</h3>
+        <ul class="liste-puce">
+          <li>Géorésistivimètre PQWT300</li>
+          <li>Pénétromètre dynamique lourd</li>
+          <li>Pénétromètres dynamiques légers</li>
+          <li>Carottier SPT</li>
+          <li>Densitomètres à membrane</li>
+        </ul>
+      </article>
+      <article class="carte">
+        <h3>Laboratoire</h3>
+        <ul class="liste-puce">
+          <li>Presse CBR et presse à béton avec accessoires</li>
+          <li>Série complète de tamis et passoires, densimètres</li>
+          <li>Coupelles de Casagrande, cône de pénétration, balances de précision</li>
+          <li>Agitateur mécanique et éprouvettes d'équivalent de sable</li>
+          <li>Moules cylindriques et cubiques, cônes d'Abrams, scléromètre</li>
+          <li>Appareillage bille-anneau et pénétrabilité pour bitumes, perméamètre</li>
+        </ul>
+      </article>
+      <article class="carte">
+        <h3>Mesures environnementales</h3>
+        <ul class="liste-puce">
+          <li>Sonomètre</li>
+          <li>Anémomètre</li>
+          <li>pH-mètres, turbidimètres et conductimètres</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="conteneur">
+    <div class="grille grille--2">
+      <div>
+        <h2>Logiciels métier</h2>
+        <div class="defilant">
+          <table class="tableau">
+            <thead><tr><th scope="col">Logiciel</th><th scope="col">Usage</th></tr></thead>
+            <tbody>
+              <tr><td>AutoCAD</td><td>Dessin technique et plans d'exécution</td></tr>
+              <tr><td>ArchiCAD</td><td>Conception architecturale</td></tr>
+              <tr><td>Robot Structural Analysis</td><td>Calcul de structures</td></tr>
+              <tr><td>CYPE</td><td>Dimensionnement du bâtiment et des réseaux</td></tr>
+              <tr><td>Plaxis 2D</td><td>Modélisation géotechnique par éléments finis</td></tr>
+              <tr><td>Alizé LCPC</td><td>Dimensionnement mécanique des chaussées</td></tr>
+              <tr><td>EPANET</td><td>Modélisation des réseaux d'eau potable</td></tr>
+              <tr><td>ArcGIS</td><td>Cartographie et analyse spatiale</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h2>Mobilité sur le terrain</h2>
+        <p>Nos missions se déroulent dans l'ensemble des régions du Niger, y compris sur des sites d'accès difficile. Le bureau dispose d'un parc de véhicules tout-terrain et de liaison lui permettant de déployer ses équipes et son matériel d'essai sans dépendre de prestataires locaux.</p>
+        <h3>Bureautique et production</h3>
+        <p>Postes fixes et portables équipés des licences métier, imprimantes grand format et matériel de reprographie pour la production des dossiers d'appel d'offres.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="pied"></div>
+
+<script>
+/* ==========================================================================
+   Références sélectionnées — VERSION PUBLIQUE
+   Ne contiennent volontairement NI montant, NI numéro de marché,
+   NI nom d'expert affecté. Ces champs restent dans les documents internes.
+   Cette structure reproduit la future table `realisations` de MySQL.
+   ========================================================================== */
+
+const SECTEURS = [
+  { slug: "routes", nom: "Routes et pistes" },
+  { slug: "hydraulique", nom: "Hydraulique et AEP" },
+  { slug: "batiment", nom: "Bâtiment et équipements" },
+  { slug: "geotechnique", nom: "Géotechnique et environnement" }
+];
+
+const REFERENCES = [
+  {
+    titre: "Supervision et contrôle des travaux de la route de contournement du barrage de Kandadji",
+    secteur: "routes",
+    client: "Ministère de l'Équipement / DGGT",
+    bailleur: "Banque islamique de développement",
+    lieu: "Région de Tillabéri, Niger",
+    periode: "2020 – en cours",
+    prestations: "40,2 km de route bitumée et deux ponts — supervision, contrôle géotechnique et contrôle des travaux.",
+    phare: true
+  },
+  {
+    titre: "Contrôle et surveillance des travaux d'entretien routier — lot 6",
+    secteur: "routes",
+    client: "AMODER",
+    bailleur: "Fonds d'entretien routier",
+    lieu: "Niamey et Tillabéri, Niger",
+    periode: "2024 – 2025",
+    prestations: "RN1W, RN4, RN6, RN24, RN25, RN27, RN31 et voiries urbaines de Niamey. Mission reconduite cinq années consécutives.",
+    phare: true
+  },
+  {
+    titre: "Études APS, APD, DAO et EIES — 551 km de routes rurales, lot 3",
+    secteur: "routes",
+    client: "Ministère de l'Équipement",
+    bailleur: "Budget national",
+    lieu: "Niamey, Dosso et Maradi, Niger",
+    periode: "2021 – 2023",
+    prestations: "Choix du tracé, topographie, assainissement, géotechnique, dimensionnement de chaussée et étude d'impact environnemental."
+  },
+  {
+    titre: "Études techniques, EIES et DAO — 160 km de pistes rurales",
+    secteur: "routes",
+    client: "ProDAF Maradi",
+    bailleur: "FIDA",
+    lieu: "Tahoua, Maradi et Zinder, Niger",
+    periode: "2017",
+    prestations: "Géotechnique, topographie, choix du tracé, recherche de carrières de latérite, EIES et dossier d'appel d'offres."
+  },
+  {
+    titre: "Études techniques détaillées — 140 km de pistes communautaires",
+    secteur: "routes",
+    client: "Programme national de développement local",
+    bailleur: "Fonds africain de développement (BAD)",
+    lieu: "Louga et Diourbel, Sénégal",
+    periode: "2016 – 2017",
+    prestations: "Géotechnique, topographie, hydrologie, dimensionnement des ouvrages et EIES."
+  },
+  {
+    titre: "Études techniques et environnementales de 67 points d'eau pastoraux",
+    secteur: "hydraulique",
+    client: "PRAPS",
+    bailleur: "IDA / Banque mondiale",
+    lieu: "Six régions du Niger",
+    periode: "2023 – 2024",
+    prestations: "APS, APD, études géophysiques, topographie, modélisation EPANET, évaluation environnementale et dossier d'appel d'offres.",
+    phare: true
+  },
+  {
+    titre: "Assistance technique aux acteurs de l'eau, l'hygiène et l'assainissement",
+    secteur: "hydraulique",
+    client: "UNICEF",
+    bailleur: "UNICEF",
+    lieu: "Région de Diffa, Niger",
+    periode: "2018 – 2021",
+    prestations: "Diagnostic, supervision des travaux hydrauliques et d'assainissement, rapportage sectoriel."
+  },
+  {
+    titre: "Suivi et contrôle des travaux de 17 mini-AEP multi-villages",
+    secteur: "hydraulique",
+    client: "UNICEF",
+    bailleur: "UNICEF",
+    lieu: "Maradi et Zinder, Niger",
+    periode: "2020 – 2022",
+    prestations: "Contrôle des forages, des châteaux d'eau, des réservoirs et des bornes-fontaines."
+  },
+  {
+    titre: "Étude technique de la mini-AEP multi-villages de Kouna Daga",
+    secteur: "hydraulique",
+    client: "GIZ",
+    bailleur: "Coopération allemande",
+    lieu: "Commune de Tarka, Zinder, Niger",
+    periode: "2024",
+    prestations: "APS, APD, étude géophysique, topographie et dimensionnement du réseau."
+  },
+  {
+    titre: "Études de faisabilité technique, environnementale et sociale d'infrastructures hydrauliques",
+    secteur: "hydraulique",
+    client: "PARCA",
+    bailleur: "SDS Sahel-Niger",
+    lieu: "Tahoua et Tillabéri, Niger",
+    periode: "2019 – 2020",
+    prestations: "Topographie, dimensionnement des ouvrages hydrauliques et étude d'impact environnemental."
+  },
+  {
+    titre: "Contrôle et suivi de la construction de 17 marchés à bétail",
+    secteur: "batiment",
+    client: "MCA-Niger",
+    bailleur: "Millennium Challenge Corporation",
+    lieu: "Hamdallaye, Wankama, Tanda et Ouna, Niger",
+    periode: "2023 – 2024",
+    prestations: "Contrôle et suivi des travaux en groupement. Attestation de bonne fin délivrée.",
+    phare: true
+  },
+  {
+    titre: "Suivi et contrôle de la construction d'infrastructures scolaires — lot 3",
+    secteur: "batiment",
+    client: "Ministère de l'Éducation nationale",
+    bailleur: "Budget national",
+    lieu: "Région de Maradi, Niger",
+    periode: "2025 – en cours",
+    prestations: "Salles de classe, blocs de latrines et murs de clôture."
+  },
+  {
+    titre: "Étude et contrôle d'un marché et de salles de classe à Iférouane",
+    secteur: "batiment",
+    client: "PP2E / Commune rurale d'Iférouane",
+    bailleur: "KfW",
+    lieu: "Région d'Agadez, Niger",
+    periode: "2019 – 2020",
+    prestations: "APS, APD, dossier d'appel d'offres et suivi-contrôle. Attestation de bonne exécution délivrée."
+  },
+  {
+    titre: "Transformation de cases de santé en centres de santé intégrés de type 1",
+    secteur: "batiment",
+    client: "Communes de Tama, Dabaga et Dannet",
+    bailleur: "FICOD / KfW",
+    lieu: "Tahoua et Agadez, Niger",
+    periode: "2023 – en cours",
+    prestations: "Études techniques, électrification solaire, latrines et incinérateur, suivi et contrôle des travaux."
+  },
+  {
+    titre: "Études techniques et dossiers d'appel d'offres pour salles de classe et latrines scolaires",
+    secteur: "batiment",
+    client: "GIZ",
+    bailleur: "Coopération allemande",
+    lieu: "Niger",
+    periode: "2017 – 2018",
+    prestations: "Quatre blocs de deux salles de classe et dix blocs de latrines à deux cabines."
+  },
+  {
+    titre: "Étude d'exécution du barrage de Theim",
+    secteur: "geotechnique",
+    client: "AGESI",
+    bailleur: "—",
+    lieu: "Région de Tillabéri, Niger",
+    periode: "2016",
+    prestations: "Essais pénétrométriques, recherche de carrières de sable, gravier, latérite et argile, formulation de béton."
+  },
+  {
+    titre: "Études géotechniques des ouvrages de franchissement de la Pendjari et de la Mekrou",
+    secteur: "geotechnique",
+    client: "PNUD Burkina Faso",
+    bailleur: "PNUD",
+    lieu: "Complexe WAP, Burkina Faso",
+    periode: "2016",
+    prestations: "Études de fondation, recherche de carrières et essais de laboratoire."
+  }
+];
+
+const ESSAIS = [
+  { famille: "Sols", designation: "Analyse granulométrique par tamisage et sédimentométrie", norme: "ASTM E11 · NF ISO 17892-4" },
+  { famille: "Sols", designation: "Limites d'Atterberg (liquidité, plasticité)", norme: "NF EN ISO 17892-12" },
+  { famille: "Granulats", designation: "Équivalent de sable et propreté des granulats", norme: "NF EN 933-8" },
+  { famille: "Béton", designation: "Confection, conservation et résistance à la compression", norme: "NF EN 12390-1/2/3 · NF P18-451" },
+  { famille: "Béton", designation: "Contrôle non destructif au scléromètre", norme: "—" },
+  { famille: "Chaussées", designation: "Portance CBR et essai Proctor", norme: "NF P94-093 · NF P94-078" },
+  { famille: "Fondations", designation: "Pénétration dynamique lourde et légère, carottier SPT", norme: "NF EN ISO 22476-2 · NF P94-116" },
+  { famille: "Bitumes", designation: "Bille-anneau et pénétrabilité à l'aiguille", norme: "NF EN 1427 · NF EN 1426" },
+  { famille: "Hydraulique", designation: "Perméabilité au perméamètre", norme: "—" },
+  { famille: "Géophysique", designation: "Sondages électriques et prospection de points d'eau", norme: "—" }
+];
+
+/* ==========================================================================
+   Comportements communs du prototype.
+   En PHP, l'en-tête et le pied de page deviendront includes/entete.php
+   et includes/pied.php — la structure HTML est identique.
+   ========================================================================== */
+
+const BASE = document.body.dataset.base || "";
+const PAGE = document.body.dataset.page || "";
+
+const CONTACT = {
+  adresse: "District de Tchangarey — BP 11725, Niamey, Niger",
+  tel1: "+227 90 53 53 23",
+  tel2: "+227 82 24 24 20",
+  email: "contact@mygeoconsulting.com"
+};
+
+const MENU = [
+  { id: "accueil", url: "index.html", libelle: "Accueil" },
+  { id: "apropos", url: "a-propos.html", libelle: "L'entreprise" },
+  { id: "services", url: "services.html", libelle: "Nos prestations" },
+  { id: "laboratoire", url: "laboratoire.html", libelle: "Laboratoire" },
+  { id: "references", url: "references.html", libelle: "Références" },
+  { id: "moyens", url: "moyens.html", libelle: "Moyens techniques" },
+  { id: "contact", url: "contact.html", libelle: "Contact" }
+];
+
+/* ---------- en-tête ------------------------------------------------------- */
+function construireEntete() {
+  const cible = document.getElementById("entete");
+  if (!cible) return;
+
+  const liens = MENU.map(function (m) {
+    const actif = m.id === PAGE ? ' aria-current="page"' : "";
+    return '<a href="' + BASE + m.url + '"' + actif + ">" + m.libelle + "</a>";
+  }).join("");
+
+  cible.innerHTML =
+    '<div class="barre-service"><div class="conteneur">' +
+      '<span>Certifié ISO 9001, ISO 14001 et ISO 45001</span>' +
+      '<a href="tel:' + CONTACT.tel1.replace(/\s/g, "") + '">' + CONTACT.tel1 + "</a>" +
+      '<a href="mailto:' + CONTACT.email + '">' + CONTACT.email + "</a>" +
+    "</div></div>" +
+    '<header class="entete"><div class="conteneur">' +
+      '<a class="marque" href="' + BASE + 'index.html">' +
+        '<img src="' + BASE + 'logo.png" alt="GéoConsulting, accueil">' +
+      "</a>" +
+      '<button class="burger" type="button" aria-expanded="false" aria-controls="nav-principal">Menu</button>' +
+      '<nav class="nav" id="nav-principal" aria-label="Navigation principale">' + liens + "</nav>" +
+    "</div></header>";
+
+  const burger = cible.querySelector(".burger");
+  const nav = cible.querySelector(".nav");
+  burger.addEventListener("click", function () {
+    const ouvert = nav.classList.toggle("ouvert");
+    burger.setAttribute("aria-expanded", String(ouvert));
+  });
+}
+
+/* ---------- pied de page -------------------------------------------------- */
+function construirePied() {
+  const cible = document.getElementById("pied");
+  if (!cible) return;
+
+  const liens = MENU.slice(1).map(function (m) {
+    return '<li><a href="' + BASE + m.url + '">' + m.libelle + "</a></li>";
+  }).join("");
+
+  cible.innerHTML =
+    '<div class="graduation graduation--vert"></div>' +
+    '<footer class="pied"><div class="conteneur">' +
+      '<div class="grille grille--3">' +
+        "<div>" +
+          "<h4>GéoConsulting</h4>" +
+          "<p>Bureau d'études, de contrôle et laboratoire d'essais, au service des infrastructures du Niger et de la sous-région depuis 2011.</p>" +
+        "</div>" +
+        "<div><h4>Le site</h4><ul class=\"liste-nue\">" + liens + "</ul></div>" +
+        "<div><h4>Nous joindre</h4><ul class=\"liste-nue\">" +
+          "<li>" + CONTACT.adresse + "</li>" +
+          '<li><a href="tel:' + CONTACT.tel1.replace(/\s/g, "") + '">' + CONTACT.tel1 + "</a></li>" +
+          '<li><a href="tel:' + CONTACT.tel2.replace(/\s/g, "") + '">' + CONTACT.tel2 + "</a></li>" +
+          '<li><a href="mailto:' + CONTACT.email + '">' + CONTACT.email + "</a></li>" +
+        "</ul></div>" +
+      "</div>" +
+      '<div class="pied-bas">' +
+        "<span>© " + new Date().getFullYear() + " GéoConsulting. Tous droits réservés.</span>" +
+        '<span>Prototype de démonstration — contenu à valider avant mise en ligne.</span>' +
+      "</div>" +
+    "</div></footer>";
+}
+
+/* ---------- références ---------------------------------------------------- */
+function nomSecteur(slug) {
+  const s = SECTEURS.find(function (x) { return x.slug === slug; });
+  return s ? s.nom : slug;
+}
+
+function carteReference(r) {
+  return (
+    '<article class="ref" data-secteur="' + r.secteur + '">' +
+      '<span class="etiquette' + (r.phare ? " etiquette--vert" : "") + '">' + nomSecteur(r.secteur) + "</span>" +
+      "<h3>" + r.titre + "</h3>" +
+      "<dl>" +
+        "<dt>Maître d'ouvrage</dt><dd>" + r.client + "</dd>" +
+        "<dt>Financement</dt><dd>" + r.bailleur + "</dd>" +
+        "<dt>Localisation</dt><dd>" + r.lieu + "</dd>" +
+        "<dt>Période</dt><dd>" + r.periode + "</dd>" +
+      "</dl>" +
+      '<p class="prestations">' + r.prestations + "</p>" +
+    "</article>"
+  );
+}
+
+function afficherReferences() {
+  const liste = document.getElementById("liste-references");
+  if (!liste) return;
+
+  const limite = parseInt(liste.dataset.limite || "0", 10);
+  const jeu = limite ? REFERENCES.filter(function (r) { return r.phare; }).slice(0, limite) : REFERENCES;
+  liste.innerHTML = jeu.map(carteReference).join("");
+
+  const filtres = document.getElementById("filtres");
+  if (!filtres) return;
+
+  filtres.innerHTML =
+    '<button class="filtre" type="button" aria-pressed="true" data-valeur="tout">Tous les secteurs</button>' +
+    SECTEURS.map(function (s) {
+      return '<button class="filtre" type="button" aria-pressed="false" data-valeur="' + s.slug + '">' + s.nom + "</button>";
+    }).join("");
+
+  filtres.addEventListener("click", function (e) {
+    const bouton = e.target.closest(".filtre");
+    if (!bouton) return;
+    filtres.querySelectorAll(".filtre").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(b === bouton));
+    });
+    const valeur = bouton.dataset.valeur;
+    liste.querySelectorAll(".ref").forEach(function (article) {
+      const visible = valeur === "tout" || article.dataset.secteur === valeur;
+      article.classList.toggle("cache", !visible);
+    });
+    const total = liste.querySelectorAll(".ref:not(.cache)").length;
+    const compteur = document.getElementById("compteur");
+    if (compteur) compteur.textContent = total + (total > 1 ? " références affichées" : " référence affichée");
+  });
+
+  const compteur = document.getElementById("compteur");
+  if (compteur) compteur.textContent = jeu.length + " références affichées";
+}
+
+/* ---------- essais de laboratoire ----------------------------------------- */
+function afficherEssais() {
+  const corps = document.getElementById("corps-essais");
+  if (!corps) return;
+  corps.innerHTML = ESSAIS.map(function (e) {
+    return "<tr><td>" + e.famille + "</td><td>" + e.designation +
+      '</td><td class="norme">' + e.norme + "</td></tr>";
+  }).join("");
+}
+
+/* ---------- formulaire de contact (démo) ---------------------------------- */
+function gererFormulaire() {
+  const form = document.getElementById("form-contact");
+  if (!form) return;
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    document.getElementById("retour-form").textContent =
+      "Prototype : le message n'est pas envoyé. La version PHP enregistrera la demande et préviendra " + CONTACT.email + ".";
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  construireEntete();
+  construirePied();
+  afficherReferences();
+  afficherEssais();
+  gererFormulaire();
+});
+
+</script>
+</body>
+</html>
